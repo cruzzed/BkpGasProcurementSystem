@@ -6,6 +6,10 @@
     "mssql1": {
       "type": "mssql",
       "connectionId": "BkpGasProcurementSystemIdentityContextConnection"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "BkpGasProcurementSystemDeliveriesContext"
     }
   }
 }

@@ -8,6 +8,10 @@
       "type": "mssql.azure",
       "connectionId": "BkpGasProcurementSystemIdentityContextConnection",
       "secretStore": "LocalSecretsFile"
+    },
+    "mssql2": {
+      "type": "mssql.local",
+      "connectionId": "BkpGasProcurementSystemDeliveriesContext"
     }
   }
 }
