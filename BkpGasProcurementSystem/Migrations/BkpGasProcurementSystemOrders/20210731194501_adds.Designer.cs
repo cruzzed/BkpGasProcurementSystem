@@ -4,43 +4,22 @@ using BkpGasProcurementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystemDeliveries
+namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystemOrders
 {
-    [DbContext(typeof(BkpGasProcurementSystemDeliveriesContext))]
-    partial class BkpGasProcurementSystemDeliveriesContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(BkpGasProcurementSystemOrdersContext))]
+    [Migration("20210731194501_adds")]
+    partial class adds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("BkpGasProcurementSystem.Models.Deliveries", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ordersID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ship_time")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ordersID");
-
-                    b.ToTable("Deliveries");
-                });
 
             modelBuilder.Entity("BkpGasProcurementSystem.Models.Orders", b =>
                 {
@@ -104,51 +83,11 @@ namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystemDeliveries
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("BkpGasProcurementSystem.Models.update_delivery", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("DeliveriesID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("update_when")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("DeliveriesID");
-
-                    b.ToTable("update_delivery");
-                });
-
-            modelBuilder.Entity("BkpGasProcurementSystem.Models.Deliveries", b =>
-                {
-                    b.HasOne("BkpGasProcurementSystem.Models.Orders", "orders")
-                        .WithMany()
-                        .HasForeignKey("ordersID");
-                });
-
             modelBuilder.Entity("BkpGasProcurementSystem.Models.Product", b =>
                 {
                     b.HasOne("BkpGasProcurementSystem.Models.Orders", null)
                         .WithMany("products")
                         .HasForeignKey("OrdersID");
-                });
-
-            modelBuilder.Entity("BkpGasProcurementSystem.Models.update_delivery", b =>
-                {
-                    b.HasOne("BkpGasProcurementSystem.Models.Deliveries", null)
-                        .WithMany("delivery_history")
-                        .HasForeignKey("DeliveriesID");
                 });
 #pragma warning restore 612, 618
         }

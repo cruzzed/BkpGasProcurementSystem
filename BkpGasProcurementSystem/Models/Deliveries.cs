@@ -10,7 +10,7 @@ namespace BkpGasProcurementSystem.Models
     {
         public int ID { get; set; }
 
-        //public Order orders { get; set; }
+        public Orders orders { get; set; }
         public List<update_delivery> delivery_history { get; set; }
         public String status { get; set; }
         [DataType(DataType.Date)]

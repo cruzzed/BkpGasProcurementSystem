@@ -33,6 +33,9 @@ namespace BkpGasProcurementSystem
 
             services.AddDbContext<BkpGasProcurementSystemProductContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("BkpGasProcurementSystemProductContext")));
+
+            services.AddDbContext<BkpGasProcurementSystemOrdersContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("BkpGasProcurementSystemOrdersContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
