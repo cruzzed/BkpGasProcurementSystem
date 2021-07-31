@@ -64,9 +64,6 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account
             [Display(Name = "Full Name")]
             public string FullName { get; set; }
 
-            [Display(Name = "Role")]
-            public string UserRole { get; set; }
-
             [Display(Name = "Address")]
             public string Address { get; set; }
 
@@ -110,18 +107,7 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    if (Input.UserRole.Equals("Customer"))
-                    {
-                        await _userManager.AddToRoleAsync(user, Roles.Customer.ToString());
-                    }
-                    else if (Input.UserRole.Equals("Admin"))
-                    {
-                        await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
-                    }
-                    else if (Input.UserRole.Equals("Delivery"))
-                    {
-                        await _userManager.AddToRoleAsync(user, Roles.Delivery.ToString());
-                    }
+                    await _userManager.AddToRoleAsync(user, Roles.Customer.ToString());
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToPage("Index");
                 }
