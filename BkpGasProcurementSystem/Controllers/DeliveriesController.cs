@@ -92,7 +92,7 @@ namespace BkpGasProcurementSystem.Views
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,status,ship_time")] Deliveries deliveries)
+        public async Task<IActionResult> Edit(int id, [Bind("ID")] Deliveries deliveries, string message)
         {
             if (id != deliveries.ID)
             {
@@ -103,6 +103,21 @@ namespace BkpGasProcurementSystem.Views
             {
                 try
                 {
+                    if (deliveries.delivery_history == null)
+                    {
+                        deliveries.delivery_history = new List<update_delivery>();
+                    }
+                    deliveries.status = message;
+                    deliveries.delivery_history.Add(
+                        
+                        new update_delivery
+                        {
+                            message = message,
+                            update_when = DateTime.Now,
+                            status = "In Delivery"
+
+                        });
+                    deliveries.ship_time = DateTime.Now;
                     _context.Update(deliveries);
                     await _context.SaveChangesAsync();
                 }
@@ -121,7 +136,6 @@ namespace BkpGasProcurementSystem.Views
             }
             return View(deliveries);
         }
-
         // GET: Deliveries/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

@@ -14,15 +14,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
-                <label asp-for="status" class="control-label"></label>
-                <input asp-for="status" class="form-control" />
-                <span asp-validation-for="status" class="text-danger"></span>
+                <label for="message" class="control-label"></label>
+                <input name="message" class="form-control" id="message" type="text" />
             </div>
-            <div class="form-group">
-                <label asp-for="ship_time" class="control-label"></label>
-                <input asp-for="ship_time" class="form-control" />
-                <span asp-validation-for="ship_time" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="status"/>
+            <input type="hidden" asp-for="ship_time"/>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
