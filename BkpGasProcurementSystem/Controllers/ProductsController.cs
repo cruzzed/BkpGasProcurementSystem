@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BkpGasProcurementSystem.Data;
 using BkpGasProcurementSystem.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System.Text;
 
 namespace BkpGasProcurementSystem.Views
 {
@@ -54,8 +57,49 @@ namespace BkpGasProcurementSystem.Views
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Type,Price,Weight")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Type,Price,Weight,Picture")] Product product, 
+                                                IFormFile Picture)
         {
+//            var MAX_SIZE = 1048576;
+
+//            if (Picture.ContentType.ToLower() != "text/plain") //not text file..
+//            {
+//                return BadRequest("The " + Picture.FileName + 
+//                    " unable to upload because uploaded file must be a text file");
+//}
+//            if (Picture.Length == 0)
+//            {
+//                return BadRequest("The " + Picture.FileName + "file is empty content!");
+//            }
+//            else if (Picture.Length > MAX_SIZE)
+//            {
+//                return BadRequest("The " + Picture.FileName + "file is exceed 1 MB !");
+//            }
+//            else
+//            {
+//                if (Picture.Length > 0)
+//                {
+//                    var filePath = "C:\\Users\\mienmay\\Desktop\\" + Picture.FileName;
+//                    using (var stream = new MemoryStream())
+//                    {
+//                        await Picture.CopyToAsync(stream);
+//                        ;
+//                    }
+//                }
+//                using (
+//                    var reader = new StreamReader(
+//                        Picture.OpenReadStream(),
+//                        new UTF8Encoding(
+//                            encoderShouldEmitUTF8Identifier: false,
+//                            throwOnInvalidBytes: true),
+//                        detectEncodingFromByteOrderMarks: true
+//                    )
+//                )
+//                {
+//                    var fileContents = await reader.ReadToEndAsync();
+//                }
+//            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(product);
