@@ -35,7 +35,15 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account.Manage
         {
             [Phone]
             [Display(Name = "Phone number")]
+            [RegularExpression(@"^[0-9]+$", ErrorMessage = "Only numbers")]
+            [StringLength(10, ErrorMessage = "Must be 9 digits", MinimumLength = 10)]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Full Name")]
+            public string FullName { get; set; }
+
+            [Display(Name = "Address")]
+            public string Address { get; set; }
         }
 
         private async Task LoadAsync(BkpGasProcurementSystemUser user)
@@ -47,7 +55,9 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FullName = user.FullName,
+                Address = user.Address,
             };
         }
 
@@ -88,6 +98,17 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            if (Input.FullName != user.FullName)
+            {
+                user.FullName = Input.FullName;
+            }
+
+            if (Input.Address != user.Address)
+            {
+                user.Address = Input.Address;
+            }
+
+            await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();

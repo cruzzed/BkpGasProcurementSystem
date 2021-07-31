@@ -83,6 +83,7 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account
 
             [Display(Name = "Phone Number")]
             [RegularExpression(@"^[0-9]+$", ErrorMessage = "Only numbers") ]
+            [StringLength(10, ErrorMessage = "Must be 9 digits", MinimumLength = 10)]
             public string PhoneNumber { get; set; }
         }
 
