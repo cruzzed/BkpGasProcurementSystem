@@ -12,8 +12,7 @@ namespace BkpGasProcurementSystem.Areas.Identity.Data
         [PersonalData]
         public string FullName { get; set; }
 
-        [PersonalData]
-        public string UserRole { get; set; }
+        public string Address { get; set; }
   
     }
 }
