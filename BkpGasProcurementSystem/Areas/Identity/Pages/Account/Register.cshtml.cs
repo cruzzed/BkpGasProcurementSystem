@@ -67,6 +67,9 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account
             [Display(Name = "Role")]
             public string UserRole { get; set; }
 
+            [Display(Name = "Address")]
+            public string Address { get; set; }
+
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
@@ -79,7 +82,7 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Display(Name = "Phone Number")]
-            [RegularExpression(@"^[0-9]+$", ErrorMessage = "Only numbers and length of 9") ]
+            [RegularExpression(@"^[0-9]+$", ErrorMessage = "Only numbers") ]
             public string PhoneNumber { get; set; }
         }
 
@@ -100,12 +103,24 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     FullName = Input.FullName,
                     EmailConfirmed = true,
-                    UserRole = Input.UserRole,
-                    PhoneNumber = Input.PhoneNumber
+                    PhoneNumber = Input.PhoneNumber,
+                    Address = Input.Address,
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    if (Input.UserRole.Equals("Customer"))
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.Customer.ToString());
+                    }
+                    else if (Input.UserRole.Equals("Admin"))
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+                    }
+                    else if (Input.UserRole.Equals("Delivery"))
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.Delivery.ToString());
+                    }
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToPage("Index");
                 }

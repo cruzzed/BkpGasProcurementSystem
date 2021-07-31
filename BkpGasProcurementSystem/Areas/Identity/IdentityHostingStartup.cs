@@ -21,6 +21,7 @@ namespace BkpGasProcurementSystem.Areas.Identity
                         context.Configuration.GetConnectionString("BkpGasProcurementSystemIdentityContextConnection")));
 
                 services.AddDefaultIdentity<BkpGasProcurementSystemUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<BkpGasProcurementSystemIdentityContext>();
             });
         }
