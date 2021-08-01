@@ -24,40 +24,61 @@
     <tbody>
         @foreach (var item in Model)
         {
-            @if (User.IsInRole("Delivery") && (item.username == User.Identity.Name))
+           
+            var deli = item.username;
+            @if (User.IsInRole("Delivery") &&  deli == User.Identity.Name)
             {
-                <tr>
+        <tr>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.status)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ship_time)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Update Delivery |</a>
-                        <a asp-action="Details" asp-route-id="@item.ID"> Details</a>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ship_time)
+            </td>
+            <td>
+                @if (item.status != "Delivery Completed")
+                {
+                    <a asp-action="Edit" asp-route-id="@item.ID">Update Delivery |</a>
+                }
 
-                    </td>
-                </tr>
+
+                <a asp-action="Details" asp-route-id="@item.ID"> Details</a>
+
+            </td>
+        </tr>
             }
-            @if (User.IsInRole("Customer") && (item.username == User.Identity.Name))
+            @if (User.IsInRole("Customer") )
             {
-                <tr>
+               
+                @if ( == User.Identity.Name)
+                {
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.status)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ship_time)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Confirm Delivery |</a>
-                        <a asp-action="Details" asp-route-id="@item.ID"> Details</a>
 
-                    </td>
-                </tr>
+    <tr>
+        <td>
+            
+        </td>
+        <td>
+           
+            @Html.DisplayFor(modelItem => item.status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ship_time)
+        </td>
+        <td>
+            @if (item.status != "Delivery Completed")
+            {
+            <a asp-action="Edit" asp-route-id="@item.ID">Confirm Delivery |</a>
             }
-        }
+        
+            
+            <a asp-action="Details" asp-route-id="@item.ID"> Details</a>
+
+        </td>
+    </tr>
+                    }
+                }
+            }
     </tbody>
 </table>

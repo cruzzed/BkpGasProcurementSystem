@@ -83,7 +83,7 @@ namespace BkpGasProcurementSystem.Views
         {
             
             
-            
+                
                 deliveries.username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
                 price = price.Remove(0, 1);
                 deliveries.orders = new Orders { phone = phone, address = address, username = username, total_price = float.Parse(price), order_date = ordertime, Payment_status = paymentstat, products = product };
@@ -95,6 +95,7 @@ namespace BkpGasProcurementSystem.Views
                 deliveries.delivery_history.Add(update);
                 deliveries.status = "Courier Assigned";
                 deliveries.ship_time = DateTime.Now;
+                
                 _context.Add(deliveries);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -138,7 +139,12 @@ namespace BkpGasProcurementSystem.Views
                     {
                         deliveries.delivery_history = new List<update_delivery>();
                     }
+                    if(message == "Delivery Completed")
+                    {
+                        deliveries.status = message;
+                    }
                     deliveries.status = message;
+                    
                     deliveries.delivery_history.Add(
                         
                         new update_delivery
