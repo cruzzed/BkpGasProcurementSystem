@@ -30,43 +30,42 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.delivery_history.Last().message)
         </dt>
-        <dt class="col-sm-2">
+        <dt class="col-sm-8">
             @Html.DisplayNameFor(model => model.delivery_history.Last().status)
         </dt>
-        @{
-            List<update_delivery> b = ViewData["delivery_history"] as List<update_delivery>;
-            System.Diagnostics.Debug.WriteLine(b.Count);
-                }
+       
 
             @foreach (update_delivery a in (List<update_delivery>)ViewData["delivery_history"])
         {
 
-            <dd class="col-sm-2">
-                @Html.DisplayFor(model => a.update_when)
-            </dd>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => a.message)
-            </dd>
-            <dd class="col-sm-11">
-                @Html.DisplayFor(model => a.status)
-            </dd>
+                <dd class="col-sm-2">
+                    @Html.DisplayFor(model => a.update_when)
+                </dd>
+                <dd class="col-sm-2">
+                    @Html.DisplayFor(model => a.message)
+                </dd>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => a.status)
+                </dd>
+            }
+                }
+
+
+        </dl>
+
+        @if (User.IsInRole("Delivery"))
+        {
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.ID">Update Delivery</a> |
+                <a asp-action="Index">Back to List</a>
+            </div>
         }
-
-
-
-    </dl>
+        @if (User.IsInRole("Customer"))
+        {
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.ID">Confirm Delivery</a> |
+                <a asp-action="Index">Back to List</a>
+            </div>
+        }
+    }
 </div>
-@if (User.IsInRole("Delivery"))
-{
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.ID">Update Delivery</a> |
-        <a asp-action="Index">Back to List</a>
-    </div>
-}
-@if (User.IsInRole("Customer"))
-{
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.ID">Confirm Delivery</a> |
-        <a asp-action="Index">Back to List</a>
-    </div>
-}

@@ -21,6 +21,10 @@ namespace BkpGasProcurementSystem.Models
         [DataType(DataType.Currency)]
         public float total_price { get; set; }
         public String Payment_status { get; set; }
+        public Orders()
+        {
+            products = new List<Product>();
+        }
 
     }
 }

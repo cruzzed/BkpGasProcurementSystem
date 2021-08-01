@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using BkpGasProcurementSystem.Areas.Identity.Data;
 using System.Security.Claims;
 
+
 namespace BkpGasProcurementSystem.Views
 {
     public class DeliveriesController : Controller
@@ -26,17 +27,25 @@ namespace BkpGasProcurementSystem.Views
             _userManager = usermgr;
             _context = context;
             ViewData["cutomeruser"] = "";
-            ViewData["delivery_history"] = new List<update_delivery>();
+            
         }
-        
+        public IActionResult getcurrentcustomer()
+        {
+            
+            return ViewBag.currentcustomername;
+        }
         // GET: Deliveries
         public async Task<IActionResult> Index()
         {
             ViewData["customeruser"] = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            
+            ViewData["history_delivery"] = new List<update_delivery>();
+            
             return View(await _context.Deliveries.ToListAsync());
         }
 
         // GET: Deliveries/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -48,7 +57,7 @@ namespace BkpGasProcurementSystem.Views
                 .FirstOrDefaultAsync(m => m.ID == id);
             
             ViewData["delivery_history"] = deliveries.delivery_history;
-            System.Diagnostics.Debug.WriteLine(deliveries.delivery_history.Count);
+            
             if (deliveries == null)
             {
                 return NotFound();
@@ -90,7 +99,7 @@ namespace BkpGasProcurementSystem.Views
             
                 
                 deliveries.username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
-                price = price.Remove(0, 2);
+                price = price.Remove(0, 1);
                 deliveries.orders = new Orders { phone = phone, address = address, username = username, total_price = float.Parse(price), order_date = ordertime, Payment_status = paymentstat, products = product };
                 var update = new update_delivery { status = "In Delivery", update_when = DateTime.Now, message = "Assigned to Courier" };
                 if (deliveries.delivery_history == null)

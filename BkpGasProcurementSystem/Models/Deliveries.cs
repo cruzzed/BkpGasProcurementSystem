@@ -15,7 +15,6 @@ namespace BkpGasProcurementSystem.Models
         public List<update_delivery> delivery_history { get; set; }
         public String status { get; set; }
         
-        
         public DateTime ship_time { get; set; }
         public String username { get; set; }
         public Deliveries()
