@@ -25,12 +25,18 @@ namespace BkpGasProcurementSystem.Views
             _httpContextAccessor = httpContextAccessor;
             _userManager = usermgr;
             _context = context;
+            ViewData["cutomeruser"] = "";
            
         }
-
+        public IActionResult getcurrentcustomer()
+        {
+            
+            return ViewBag.currentcustomername;
+        }
         // GET: Deliveries
         public async Task<IActionResult> Index()
         {
+            ViewData["customeruser"] = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
             return View(await _context.Deliveries.ToListAsync());
         }
 
