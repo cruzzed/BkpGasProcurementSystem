@@ -29,7 +29,11 @@ namespace BkpGasProcurementSystem.Views
             ViewData["cutomeruser"] = "";
             
         }
-        
+        public IActionResult getcurrentcustomer()
+        {
+            
+            return ViewBag.currentcustomername;
+        }
         // GET: Deliveries
         public async Task<IActionResult> Index()
         {

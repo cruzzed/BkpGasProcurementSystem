@@ -13,8 +13,7 @@ namespace BkpGasProcurementSystem.Models
         public Orders orders { get; set; }
         public List<update_delivery> delivery_history { get; set; }
         public String status { get; set; }
-        
-        
+        [DataType(DataType.Date)]
         public DateTime ship_time { get; set; }
         public String username { get; set; }
     }
