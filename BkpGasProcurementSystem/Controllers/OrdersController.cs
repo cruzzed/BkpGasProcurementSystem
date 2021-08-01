@@ -68,28 +68,31 @@ namespace BkpGasProcurementSystem.Views
  
         public async Task<IActionResult> Create(int ordid,[Bind("ID,order_date,username,address,phone,total_price,Payment_status")] Orders orders, string price, string type, string name, byte[] pic, int weight)
         {
+            
             if (ModelState.IsValid)
             {
 
                 var id = _userManager.GetUserId(HttpContext.User);
                 orders.username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
                 BkpGasProcurementSystemUser user = _userManager.FindByIdAsync(id).Result;
-                _context.Orders.Include(m => m.products).SingleOrDefault(m => m.username == id);
-                var order_list = _context.Orders;
+                
+                
                 var flag = false;
-            Orders unpaid_order = null;
-                if (order_list.Count() > 0)
+           
+                
+                
+                    _context.Orders.Include(m => m.products).SingleOrDefault(m => m.username == user.UserName && m.Payment_status.ToUpper() == "PENDING");
+                    var unpaid_order = await _context.Orders.FirstOrDefaultAsync(m => m.username == user.UserName && m.Payment_status.ToUpper() == "PENDING");
+                    
+                
+                System.Diagnostics.Debug.WriteLine(unpaid_order);
+                price = price.Remove(0, 2);
+                //int len = price.Length-3;
+                //price = price.Remove(len, 3);
+               
+                if (unpaid_order != null)
                 {
-                    unpaid_order = order_list.Where(o => o.username == user.UserName)
-                        .Where(o => o.Payment_status.ToUpper() == "PENDING")
-                        .FirstOrDefault();
-                }
-
-                price = price.Remove(0, 1);
-                int len = price.Length-3;
-                price = price.Remove(len, 3);
-                if(unpaid_order != null)
-                {
+                   
                     flag = true;
                 }
                 
@@ -118,13 +121,15 @@ namespace BkpGasProcurementSystem.Views
                     };
                 }
                 var tot = 0;
-                foreach( var a in unpaid_order.products)
+                System.Diagnostics.Debug.WriteLine(unpaid_order.products.Count);
+                foreach ( var a in unpaid_order.products)
                 {
+                    System.Diagnostics.Debug.WriteLine(a.Type);
                     tot  = tot + a.Price;
                 }
                 unpaid_order.total_price = tot + int.Parse(price);
-
-            System.Diagnostics.Debug.WriteLine(unpaid_order.ID);
+                System.Diagnostics.Debug.WriteLine(unpaid_order.total_price);
+                System.Diagnostics.Debug.WriteLine(unpaid_order.ID);
 
 
 

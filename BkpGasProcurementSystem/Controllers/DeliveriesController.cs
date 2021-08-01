@@ -57,7 +57,7 @@ namespace BkpGasProcurementSystem.Views
                 .FirstOrDefaultAsync(m => m.ID == id);
             
             ViewData["delivery_history"] = deliveries.delivery_history;
-            System.Diagnostics.Debug.WriteLine(deliveries.delivery_history.Count);
+            
             if (deliveries == null)
             {
                 return NotFound();
