@@ -30,6 +30,15 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">Pending Orders</a>
                             </li>
                         }
+                        @if (User.IsInRole("Customer"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Deliveries" asp-action="Index">Delivery</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">My Orders</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="registerUser">Register New User (Admin)</a>
                         </li>

@@ -2,7 +2,7 @@
 
 namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystemOrders
 {
-    public partial class adds : Migration
+    public partial class addedstuff : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

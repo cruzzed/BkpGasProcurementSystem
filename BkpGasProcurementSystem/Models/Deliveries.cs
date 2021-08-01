@@ -15,5 +15,6 @@ namespace BkpGasProcurementSystem.Models
         public String status { get; set; }
         [DataType(DataType.Date)]
         public DateTime ship_time { get; set; }
+        public String username { get; set; }
     }
 }

@@ -7,16 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BkpGasProcurementSystem.Data;
 using BkpGasProcurementSystem.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using BkpGasProcurementSystem.Areas.Identity.Data;
+using System.Security.Claims;
 
 namespace BkpGasProcurementSystem.Views
 {
     public class DeliveriesController : Controller
     {
-        private readonly BkpGasProcurementSystemDeliveriesContext _context;
 
-        public DeliveriesController(BkpGasProcurementSystemDeliveriesContext context)
+        private readonly BkpGasProcurementSystemDeliveriesContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<BkpGasProcurementSystemUser> _userManager;
+        public DeliveriesController(BkpGasProcurementSystemDeliveriesContext context,UserManager<BkpGasProcurementSystemUser> usermgr,IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = usermgr;
             _context = context;
+           
         }
 
         // GET: Deliveries
@@ -54,21 +63,43 @@ namespace BkpGasProcurementSystem.Views
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,status,ship_time")] Deliveries deliveries)
+        public ActionResult CreateDelivery(List<Product> product, string phone, string address, string username, String price, DateTime ordertime, String paymentstat)
         {
-            if (ModelState.IsValid)
-            {
+            
+            ViewBag.product = product;
+            ViewBag.phone = phone;
+            ViewBag.address = address;
+            ViewBag.username = username;
+            ViewBag.price = price;
+            ViewBag.ordertime = ordertime;
+            ViewBag.paymentstat = paymentstat;
+
+            return View("~/Views/Deliveries/Create.cshtml");
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("ID")] Deliveries deliveries, List<Product> product,string phone, string address, string username, string price,DateTime ordertime,String paymentstat)
+        {
+            
+            
+            
+                deliveries.username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+                price = price.Remove(0, 1);
+                deliveries.orders = new Orders { phone = phone, address = address, username = username, total_price = float.Parse(price), order_date = ordertime, Payment_status = paymentstat, products = product };
                 var update = new update_delivery { status = "In Delivery", update_when = DateTime.Now, message = "Assigned to Courier" };
                 if (deliveries.delivery_history == null)
                 {
                     deliveries.delivery_history = new List<update_delivery>();
                 }
                 deliveries.delivery_history.Add(update);
+                deliveries.status = "Courier Assigned";
+                deliveries.ship_time = DateTime.Now;
                 _context.Add(deliveries);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            return View(deliveries);
+            
+            
         }
 
         // GET: Deliveries/Edit/5
@@ -118,6 +149,7 @@ namespace BkpGasProcurementSystem.Views
 
                         });
                     deliveries.ship_time = DateTime.Now;
+                    deliveries.username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
                     _context.Update(deliveries);
                     await _context.SaveChangesAsync();
                 }

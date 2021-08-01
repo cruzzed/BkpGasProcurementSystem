@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20210731074641_changeidentitytablename.Designer.cs" />
     <Compile Remove="Migrations\20210731075519_addusername.cs" />
     <Compile Remove="Migrations\20210731075519_addusername.Designer.cs" />
+    <Compile Remove="Migrations\BkpGasProcurementSystemOrders\20210731194501_adds.cs" />
+    <Compile Remove="Migrations\BkpGasProcurementSystemOrders\20210731194501_adds.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

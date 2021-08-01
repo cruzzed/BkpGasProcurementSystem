@@ -34,32 +34,67 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.order_date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.total_price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Payment_status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+
+            @if (User.IsInRole("Delivery"))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.order_date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.total_price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Payment_status)
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <a asp-action="Edit" asp-route-id="@item.ID">Accept Order</a>
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+            }
+            else if (item.username == User.Identity.Name)
+            {
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.order_date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.total_price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Payment_status)
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <a asp-action="Delete" asp-route-id="@item.ID">Cancel Order </a>
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+            }
+
+    
+        }
+
     </tbody>
 </table>
