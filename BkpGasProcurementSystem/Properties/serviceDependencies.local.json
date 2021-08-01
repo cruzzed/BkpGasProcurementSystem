@@ -1,12 +1,13 @@
 {
   "dependencies": {
-    "mssql1": {
-      "type": "mssql.local",
-      "connectionId": "BkpGasProcurementSystemProductContext"
+    "secrets1": {
+      "type": "secrets.user"
     },
-    "mssql2": {
-      "type": "mssql.local",
-      "connectionId": "BkpGasProcurementSystemOrdersContext"
+    "storage1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/bkpgasprocurementsystems",
+      "type": "storage.azure",
+      "connectionId": "BkpGasProcurementSystemBlobConnect",
+      "secretStore": "LocalSecretsFile"
     }
   }
 }

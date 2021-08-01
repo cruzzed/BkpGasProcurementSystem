@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -205,6 +208,19 @@ namespace BkpGasProcurementSystem.Views
 
         public async Task<Product> LoadFormPictureToProduct(Product P, IFormFile Picture)
         {
+            //step 1: read json
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+            IConfigurationRoot configure = builder.Build();
+
+            CloudStorageAccount objectaccount = CloudStorageAccount.Parse(configure["ConnectionString:BkpGasProcurementSystemBlobConnect"]);
+
+            CloudBlobClient blobclient = objectaccount.CreateCloudBlobClient();
+
+            //step 2: how to create a new container in the blob storage account.
+            CloudBlobContainer container = blobclient.GetContainerReference("testblob");
+
             using (var stream = new MemoryStream())
             {
                 await Picture.CopyToAsync(stream);
@@ -258,7 +274,7 @@ namespace BkpGasProcurementSystem.Views
             try
             {
                 if (unpaid_order.products == null) unpaid_order.products = new List<Product>();
-                unpaid_order.products.(product);
+                unpaid_order.products.Add(product);
                 _order_context.Orders.Update(unpaid_order);
                 await _order_context.SaveChangesAsync();
             } 

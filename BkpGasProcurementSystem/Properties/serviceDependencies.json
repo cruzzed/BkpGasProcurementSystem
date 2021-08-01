@@ -1,12 +1,27 @@
 {
   "dependencies": {
-    "mssql1": {
+    "secrets1": {
+      "type": "secrets"
+    },
+    "storage1": {
+      "type": "storage",
+      "connectionId": "BkpGasProcurementSystemBlobConnect"
+    },
+    "mssql3": {
       "type": "mssql",
-      "connectionId": "BkpGasProcurementSystemProductContext"
+      "connectionId": "BkpGasProcurementSystemIdentityContextConnection"
+    },
+    "mssql4": {
+      "type": "mssql",
+      "connectionId": "BkpGasProcurementSystemOrdersContext"
     },
     "mssql2": {
       "type": "mssql",
-      "connectionId": "BkpGasProcurementSystemOrdersContext"
+      "connectionId": "BkpGasProcurementSystemProductContext"
+    },
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "BkpGasProcurementSystemDeliveriesContext"
     }
   }
 }
