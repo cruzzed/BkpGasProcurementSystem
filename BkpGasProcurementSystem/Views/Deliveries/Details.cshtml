@@ -33,8 +33,12 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.delivery_history.Last().status)
         </dt>
-        
-        @foreach (update_delivery a in (List<update_delivery>)ViewData["delivery_history"])
+        @{
+            List<update_delivery> b = ViewData["delivery_history"] as List<update_delivery>;
+            System.Diagnostics.Debug.WriteLine(b.Count);
+                }
+
+            @foreach (update_delivery a in (List<update_delivery>)ViewData["delivery_history"])
         {
 
             <dd class="col-sm-2">

@@ -8,6 +8,7 @@ namespace BkpGasProcurementSystem.Models
 {
     public class Deliveries
     {
+        [Key]
         public int ID { get; set; }
 
         public Orders orders { get; set; }
@@ -17,5 +18,9 @@ namespace BkpGasProcurementSystem.Models
         
         public DateTime ship_time { get; set; }
         public String username { get; set; }
+        public Deliveries()
+        {
+           delivery_history = new List<update_delivery>();
+        }
     }
 }
