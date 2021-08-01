@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Picture)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
@@ -31,6 +34,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @if (item.Picture != null)
+                {
+                    <img id="Picture" style="width:128px;height:128px; object-fit:cover" src="data:image/*;base64,@(Convert.ToBase64String(item.Picture))">
+                }
+                else
+                {
+                    <p>No Picture Available.</p>
+                }
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
@@ -43,9 +56,17 @@
                 @Html.DisplayFor(modelItem => item.Weight)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> <span>|</span>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> <span>|</span>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                }
+                
+                <form asp-action="AddToOrder" asp-route-id="@item.Id">
+                    <input type="hidden" value="item.Id"/>
+                    <input class="btn btn-primary" type="submit" value="Add to Order"/>
+                </form>
             </td>
         </tr>
 }

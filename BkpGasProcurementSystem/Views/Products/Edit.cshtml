@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -32,6 +32,19 @@
                 <label asp-for="Weight" class="control-label"></label>
                 <input asp-for="Weight" class="form-control" />
                 <span asp-validation-for="Weight" class="text-danger"></span>
+            </div>
+            @if (Model.Picture != null)
+            {
+                <img id="Picture" style="width:350px;height:350px; object-fit:cover" src="data:image/*;base64,@(Convert.ToBase64String(Model.Picture))">
+            }
+            else
+            {
+                <img id="Picture" style="width:350px;height:350px; object-fit:cover" src="">
+            }
+            <div class="form-group">
+                <label asp-for="Picture" class="control-label"></label>
+                <input accept=".png,.jpg,.jpeg,.gif,.tif" class="form-control" type="file" asp-for="Picture" />
+                <span asp-validation-for="Picture" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
