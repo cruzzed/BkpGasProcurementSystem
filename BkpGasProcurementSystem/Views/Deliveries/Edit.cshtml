@@ -11,17 +11,34 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
-            <div class="form-group">
-                <label for="message" class="control-label"></label>
-                <input name="message" class="form-control" id="message" type="text" />
-            </div>
-            <input type="hidden" asp-for="status"/>
-            <input type="hidden" asp-for="ship_time"/>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+            @if (User.IsInRole("Delivery"))
+            {
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ID" />
+                <div class="form-group">
+                    <label for="message" class="control-label">Input Update Message</label>
+                    <input name="message" class="form-control" id="message" type="text" />
+                </div>
+                <input type="hidden" asp-for="status" />
+                <input type="hidden" asp-for="ship_time" />
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            }
+            @if (User.IsInRole("Customer"))
+            {
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ID" />
+                <div class="form-group">
+                    <label for="message" class="control-label">Confirm Received Delivery?</label>
+                    <input name="message" class="form-control" id="message" type="hidden" value="Delivery Completed"/>
+                </div>
+                <input type="hidden" asp-for="status" value="Item Received" />
+                <input type="hidden" asp-for="ship_time" />
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            }
         </form>
     </div>
 </div>

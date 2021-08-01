@@ -10,49 +10,73 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
-            <div class="form-group">
-                <label asp-for="order_date" class="control-label"></label>
-                <input asp-for="order_date" class="form-control" />
-                <span asp-validation-for="order_date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="username" class="control-label"></label>
-                <input asp-for="username" class="form-control" />
-                <span asp-validation-for="username" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="address" class="control-label"></label>
-                <input asp-for="address" class="form-control" />
-                <span asp-validation-for="address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="phone" class="control-label"></label>
-                <input asp-for="phone" class="form-control" />
-                <span asp-validation-for="phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="total_price" class="control-label"></label>
-                <input asp-for="total_price" class="form-control" />
-                <span asp-validation-for="total_price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Payment_status" class="control-label"></label>
-                <input asp-for="Payment_status" class="form-control" />
-                <span asp-validation-for="Payment_status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+            @using ( Html.BeginForm("CreateDelivery", "Deliveries", FormMethod.Post))
+            {
+                <input type="hidden" asp-for="ID" />
+                <div class="form-group">
+                    <label id="order_lbl" asp-for="order_date" class="control-label">@Html.DisplayFor(m=> Model.order_date)</label>
+                    <input id="order_in" name="ordertime" type="hidden" for="ordertime"  />
+                    
+                </div>
+                <div class="form-group">
+                    <label id="prc_lbl" asp-for="total_price" class="control-label">@Html.DisplayFor(model => model.total_price)</label>
+                    <input id="prc_in" name="price" type="hidden" for="price"/>
+                   
+                </div>
+                <div class="form-group">
+                    <label id="add_lbl" asp-for="address" class="control-label">@Html.DisplayFor(model => model.address)</label>
+                    <input id="add_in" name="address" type="hidden" for="address"  />
+                   
+                </div>
+                <div class="form-group">
+                    <label id="usr_lbl" asp-for="username" class="control-label">@Html.DisplayFor(model => model.username)</label>
+                    <input id="usr_in" name="username" type="hidden" for="username" />
+                    
+                </div>
+                <div class="form-group">
+                    <label id="pay_lbl" asp-for="Payment_status" class="control-label">@Html.DisplayFor(model => model.Payment_status)</label>
+                    <input id="pay_in" name="paymentstat" type="hidden" for="paymentstat"  />
+                    
+                </div>
+                <div class="form-group">
+                    <label id="phn_lbl" asp-for="phone" class="control-label">@Html.DisplayFor(model => model.phone)</label>
+                    <input id="phn_in" name="phone" type="hidden" for="phone"  />
+                    
+                </div>
+                //how to pass list though the use of @ dkk
+                <div class="form-group">
+                    <label id="pro_lbl" asp-for="products" class="control-label">@Html.DisplayFor(model => model.products)</label>
+                    <input id="pro_in" name="product" type ="hidden" for="product"  />
+                    
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit" onclick="OnSubmit()"  />
+                </div>
+                <script type="text/javascript">
+                    function OnSubmit() {
+                        document.getElementById("order_in").value = document.getElementById("order_lbl").innerHTML;
+                        document.getElementById("prc_in").value = document.getElementById("prc_lbl").innerHTML;
+                        document.getElementById("add_in").value = document.getElementById("add_lbl").innerHTML;
+                        document.getElementById("usr_in").value = document.getElementById("usr_lbl").innerHTML;
+                        document.getElementById("pay_in").value = document.getElementById("pay_lbl").innerHTML;
+                        document.getElementById("phn_in").value = document.getElementById("phn_lbl").innerHTML;
+                        document.getElementById("pro_in").value = document.getElementById("pro_lbl").innerHTML;
+                    }
+                </script>
+
+
+            }
+
+        
     </div>
 </div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+           
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

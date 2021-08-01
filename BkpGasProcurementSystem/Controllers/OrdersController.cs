@@ -102,9 +102,9 @@ namespace BkpGasProcurementSystem.Views
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,order_date,username,address,phone,total_price,Payment_status")] Orders orders)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id != orders.ID)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -113,29 +113,18 @@ namespace BkpGasProcurementSystem.Views
             {
                 try
                 {
-                    var ids = _userManager.GetUserId(HttpContext.User);
-                    orders.username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
-                    BkpGasProcurementSystemUser user = _userManager.FindByIdAsync(ids).Result;
-                    orders.address = user.Address;
-                    orders.phone = user.PhoneNumber;
-                   
-                    _context.Update(orders);
+                    var orderss = await _context.Orders.FindAsync(id);
+                    _context.Orders.Remove(orderss);
                     await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrdersExists(orders.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+
                 }
-                return RedirectToAction(nameof(Index));
+                return View("~/Views/Deliveries/Create.cshtml");
             }
-            return View(orders);
+            return View("~/Views/Deliveries/Create.cshtml");
         }
 
         // GET: Orders/Delete/5

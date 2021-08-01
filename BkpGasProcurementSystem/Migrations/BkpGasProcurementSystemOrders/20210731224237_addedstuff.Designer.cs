@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystemOrders
 {
     [DbContext(typeof(BkpGasProcurementSystemOrdersContext))]
-    [Migration("20210731194501_adds")]
-    partial class adds
+    [Migration("20210731224237_addedstuff")]
+    partial class addedstuff
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

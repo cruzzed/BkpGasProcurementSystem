@@ -10,21 +10,61 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
             <div class="form-group">
-                <label asp-for="status" class="control-label"></label>
-                <input asp-for="status" class="form-control" />
-                <span asp-validation-for="status" class="text-danger"></span>
+                <label class="control-label">Time of Order</label>
+                <label id="order_lbl" class="control-label">@ViewBag.ordertime</label>
+                <input id="order_in" name="ordertime" type="hidden" for="ordertime" value="@ViewBag.ordertime"/>
+
             </div>
             <div class="form-group">
-                <label asp-for="ship_time" class="control-label"></label>
-                <input asp-for="ship_time" class="form-control" />
-                <span asp-validation-for="ship_time" class="text-danger"></span>
+                <label class="control-label">Total Order Price</label>
+                <label id="prc_lbl" class="control-label">@ViewBag.price</label>
+                <input id="prc_in" name="price" type="hidden" for="price" value="@ViewBag.price" />
+
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label class="control-label">Designated Address</label>
+                <label id="add_lbl" class="control-label">@ViewBag.address</label>
+                <input id="add_in" name="address" type="hidden" for="address" value="@ViewBag.address" />
+
             </div>
+            <div class="form-group">
+                <label class="control-label">Receiver E-mail</label>
+                <label id="usr_lbl" class="control-label">@ViewBag.username</label>
+                <input id="usr_in" name="username" type="hidden" for="username" value="@ViewBag.username"/>
+
+            </div>
+            <div class="form-group">
+                <label class="control-label">Payment Status of Order</label>
+                <label id="pay_lbl" class="control-label">@ViewBag.paymentstat</label>
+                <input id="pay_in" name="paymentstat" type="hidden" for="paymentstat" value="@ViewBag.paymentstat" />
+
+            </div>
+            <div class="form-group">
+                <label class="control-label">Receiver Phone Number</label>
+                <label id="phn_lbl" class="control-label">@ViewBag.phone</label>
+                <input id="phn_in" name="phone" type="hidden" for="phone" value="@ViewBag.phone"/>
+
+            </div>
+            <div class="form-group">
+                <label class="control-label">Product List</label>
+                
+                <label id="pro_lbl" class="control-label">@ViewBag.product</label>
+                <input id="pro_in" name="product" type="hidden" for="product" value="@ViewBag.product"/>
+
+            </div>
+            <input type="hidden" asp-for="status" value=""/>
+            <input type="hidden" asp-for="ship_time" value=""/>
+            <label class="control-label">Confirm Order Assignment?</label>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+
+            
+
         </form>
     </div>
 </div>
