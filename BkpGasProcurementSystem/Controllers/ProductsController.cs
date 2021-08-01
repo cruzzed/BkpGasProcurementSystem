@@ -10,16 +10,30 @@ using BkpGasProcurementSystem.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text;
+using BkpGasProcurementSystem.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
 
 namespace BkpGasProcurementSystem.Views
 {
     public class ProductsController : Controller
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<BkpGasProcurementSystemUser> _userManager;
         private readonly BkpGasProcurementSystemProductContext _context;
+        private readonly BkpGasProcurementSystemOrdersContext _order_context;
 
-        public ProductsController(BkpGasProcurementSystemProductContext context)
+        public ProductsController(
+            BkpGasProcurementSystemProductContext context,
+            BkpGasProcurementSystemOrdersContext order_context,
+            UserManager<BkpGasProcurementSystemUser> userManager,
+            IHttpContextAccessor httpContextAccessor
+        )
         {
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
             _context = context;
+            _order_context = order_context;
         }
 
         // GET: Products
@@ -57,51 +71,18 @@ namespace BkpGasProcurementSystem.Views
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Type,Price,Weight,Picture")] Product product, 
+        public async Task<IActionResult> Create([Bind("Id,Name,Type,Price,Weight")] Product product, 
                                                 IFormFile Picture)
         {
-//            var MAX_SIZE = 1048576;
-
-//            if (Picture.ContentType.ToLower() != "text/plain") //not text file..
-//            {
-//                return BadRequest("The " + Picture.FileName + 
-//                    " unable to upload because uploaded file must be a text file");
-//}
-//            if (Picture.Length == 0)
-//            {
-//                return BadRequest("The " + Picture.FileName + "file is empty content!");
-//            }
-//            else if (Picture.Length > MAX_SIZE)
-//            {
-//                return BadRequest("The " + Picture.FileName + "file is exceed 1 MB !");
-//            }
-//            else
-//            {
-//                if (Picture.Length > 0)
-//                {
-//                    var filePath = "C:\\Users\\mienmay\\Desktop\\" + Picture.FileName;
-//                    using (var stream = new MemoryStream())
-//                    {
-//                        await Picture.CopyToAsync(stream);
-//                        ;
-//                    }
-//                }
-//                using (
-//                    var reader = new StreamReader(
-//                        Picture.OpenReadStream(),
-//                        new UTF8Encoding(
-//                            encoderShouldEmitUTF8Identifier: false,
-//                            throwOnInvalidBytes: true),
-//                        detectEncodingFromByteOrderMarks: true
-//                    )
-//                )
-//                {
-//                    var fileContents = await reader.ReadToEndAsync();
-//                }
-//            }
 
             if (ModelState.IsValid)
             {
+                
+                // check if picture is valid
+                var PictureValid = ValidatePicture(Picture);
+                if (PictureValid.GetType() != typeof(OkResult)) return PictureValid;
+
+                await LoadFormPictureToProduct(product, Picture);
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -130,7 +111,8 @@ namespace BkpGasProcurementSystem.Views
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Type,Price,Weight")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Type,Price,Weight")] Product product,
+                                              IFormFile Picture)
         {
             if (id != product.Id)
             {
@@ -141,6 +123,12 @@ namespace BkpGasProcurementSystem.Views
             {
                 try
                 {
+
+                    // check if picture is valid
+                    var PictureValid = ValidatePicture(Picture);
+                    if (PictureValid.GetType() != typeof(OkResult)) return PictureValid;
+
+                    await LoadFormPictureToProduct(product, Picture);
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
@@ -193,5 +181,83 @@ namespace BkpGasProcurementSystem.Views
         {
             return _context.Product.Any(e => e.Id == id);
         }
+
+        public IActionResult ValidatePicture(IFormFile Picture)
+        {
+            var MAX_SIZE = 1 * 1024 * 1024;
+            if (Picture != null)
+            {
+                if (Picture.ContentType.ToLower().Split("/")[0] != "image") //accept=".png,.jpg,.jpeg,.gif,.tif"
+                {
+                    return BadRequest("The " + Picture.FileName +
+                        " unable to upload because uploaded file must be a text file");
+                }
+                if (Picture.Length == 0)
+                {
+                    return BadRequest("The " + Picture.FileName + "file is empty content!");
+                }
+                else if (Picture.Length > MAX_SIZE)
+                {
+                    return BadRequest("The " + Picture.FileName + "file is exceed 1 MB !");
+                }
+                return Ok();
+            }
+            return BadRequest("Unknown Error!");
+        }
+
+        public async Task<Product> LoadFormPictureToProduct(Product P, IFormFile Picture)
+        {
+            using (var stream = new MemoryStream())
+            {
+                await Picture.CopyToAsync(stream);
+                P.Picture = stream.ToArray();
+            }
+            return P;
+        }
+
+        [HttpPost, ActionName("AddToOrder")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToOrder([Bind("Id")] Product product)
+        {
+            BkpGasProcurementSystemUser user = _userManager.FindByIdAsync(
+                _userManager.GetUserId(HttpContext.User)
+            ).Result;
+
+            var order_list = from order in _order_context.Orders
+                             select order;
+
+            Orders unpaid_order = null;
+
+            if (order_list.Count() > 0) { 
+                unpaid_order = order_list.Where(o => o.Payment_status.ToLower() == "pending")
+                                         .Where(o => o.username == user.UserName)
+                                         .First();
+            }
+
+            if (unpaid_order == null) {
+                Debug.WriteLine("im null!");
+                unpaid_order = new Orders
+                {
+                    products = new List<Product>(),
+                    username = user.UserName,
+                    //Payment_status = "pending".ToLower(),
+                    //address = user.Address,
+                    //phone = user.PhoneNumber,
+                    //order_date = DateTime.Now,
+                    //total_price = 0.0f
+                };
+                _order_context.Add(unpaid_order);
+            }
+
+            Debug.WriteLine(unpaid_order.ID);
+
+            unpaid_order.products.Add(product);
+            _order_context.Add(unpaid_order);
+
+            
+            return RedirectToAction(nameof(Index));
+        }
+
+
     }
 }
