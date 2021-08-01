@@ -26,13 +26,9 @@ namespace BkpGasProcurementSystem.Views
             _userManager = usermgr;
             _context = context;
             ViewData["cutomeruser"] = "";
-           
+            ViewData["delivery_history"] = new List<update_delivery>();
         }
-        public IActionResult getcurrentcustomer()
-        {
-            
-            return ViewBag.currentcustomername;
-        }
+        
         // GET: Deliveries
         public async Task<IActionResult> Index()
         {
@@ -47,9 +43,10 @@ namespace BkpGasProcurementSystem.Views
             {
                 return NotFound();
             }
-
+            
             var deliveries = await _context.Deliveries
                 .FirstOrDefaultAsync(m => m.ID == id);
+            
             if (deliveries == null)
             {
                 return NotFound();
