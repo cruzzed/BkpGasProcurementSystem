@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using BkpGasProcurementSystem.Areas.Identity.Data;
 using System.Security.Claims;
 
+
 namespace BkpGasProcurementSystem.Views
 {
     public class DeliveriesController : Controller
@@ -26,31 +27,38 @@ namespace BkpGasProcurementSystem.Views
             _userManager = usermgr;
             _context = context;
             ViewData["cutomeruser"] = "";
-            ViewData["delivery_history"] = new List<update_delivery>();
+            
         }
         
         // GET: Deliveries
         public async Task<IActionResult> Index()
         {
             ViewData["customeruser"] = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            
+            ViewData["history_delivery"] = new List<update_delivery>();
+            
             return View(await _context.Deliveries.ToListAsync());
         }
 
         // GET: Deliveries/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            
-            var deliveries = await _context.Deliveries
+             
+            Deliveries deliveries = await _context.Deliveries
                 .FirstOrDefaultAsync(m => m.ID == id);
-            
-            if (deliveries == null)
-            {
-                return NotFound();
-            }
+            update_delivery update = 
+            List<update_delivery> up
+            ViewData["history_delivery"] = up;
+           
+                if (deliveries == null)
+                {
+                    return NotFound();
+                }
 
             return View(deliveries);
         }
