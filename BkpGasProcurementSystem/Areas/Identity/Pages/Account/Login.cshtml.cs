@@ -84,7 +84,19 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    if(User.IsInRole("Customer"))
+                    {
+                        return RedirectToAction("Index", "Orders");
+                    }
+                    else if(User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("Index", "Products");
+                    }
+                    else if(User.IsInRole("Delivery"))
+                    {
+                       return RedirectToAction("Index", "Deliveries");
+                    }
+                    //return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
