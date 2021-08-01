@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using BkpGasProcurementSystem.Areas.Identity.Data;
 using BkpGasProcurementSystem.Data;
 using BkpGasProcurementSystem.Models;
 using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Text;
-using BkpGasProcurementSystem.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BkpGasProcurementSystem.Views
 {
@@ -219,43 +217,66 @@ namespace BkpGasProcurementSystem.Views
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToOrder([Bind("Id")] Product product)
         {
+           
             BkpGasProcurementSystemUser user = _userManager.FindByIdAsync(
                 _userManager.GetUserId(HttpContext.User)
             ).Result;
 
             var order_list = from order in _order_context.Orders
                              select order;
-
+          
             Orders unpaid_order = null;
-
+          
             if (order_list.Count() > 0) { 
-                unpaid_order = order_list.Where(o => o.Payment_status.ToLower() == "pending")
+                unpaid_order = await order_list.Where(o => o.Payment_status.ToLower() == "pending")
                                          .Where(o => o.username == user.UserName)
-                                         .First();
+                                         .FirstAsync();
             }
 
             if (unpaid_order == null) {
                 Debug.WriteLine("im null!");
+             
                 unpaid_order = new Orders
                 {
                     products = new List<Product>(),
                     username = user.UserName,
-                    //Payment_status = "pending".ToLower(),
-                    //address = user.Address,
-                    //phone = user.PhoneNumber,
-                    //order_date = DateTime.Now,
-                    //total_price = 0.0f
+                    Payment_status = "pending".ToLower(),
+                    address = user.Address,
+                    phone = user.PhoneNumber,
+                    order_date = DateTime.Now,
+                    total_price = 0.0f
                 };
-                _order_context.Add(unpaid_order);
+                _order_context.Orders.Add(unpaid_order);
+                await _order_context.SaveChangesAsync();
             }
 
             Debug.WriteLine(unpaid_order.ID);
 
-            unpaid_order.products.Add(product);
-            _order_context.Add(unpaid_order);
-
+            unpaid_order = await _order_context.Orders.FindAsync(unpaid_order.ID);
+            _order_context.Attach(unpaid_order);
+            product = await _context.Product.FindAsync(product.Id);
+            try
+            {
+                if (unpaid_order.products == null) unpaid_order.products = new List<Product>();
+                unpaid_order.products.(product);
+                _order_context.Orders.Update(unpaid_order);
+                await _order_context.SaveChangesAsync();
+            } 
+            catch (DbUpdateConcurrencyException)
+            {
+                if(unpaid_order.products == null)
+                {
+                    Debug.WriteLine("list is null");
+                } else if (unpaid_order.products.Count() > 0)
+                {
+                    Debug.WriteLine("list is not null but empty");
+                }
+                throw;
+            }
             
+
             return RedirectToAction(nameof(Index));
+            
         }
 
 

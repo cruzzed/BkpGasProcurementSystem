@@ -64,7 +64,7 @@
                 }
                 
                 <form asp-action="AddToOrder" asp-route-id="@item.Id">
-                    <input type="hidden" value="item.Id"/>
+                    <input name="Id" type="hidden" value="@item.Id"/>
                     <input class="btn btn-primary" type="submit" value="Add to Order"/>
                 </form>
             </td>

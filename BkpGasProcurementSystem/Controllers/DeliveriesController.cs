@@ -52,17 +52,16 @@ namespace BkpGasProcurementSystem.Views
             {
                 return NotFound();
             }
-             
-            Deliveries deliveries = await _context.Deliveries
+            _context.Deliveries.Include(m => m.delivery_history).SingleOrDefault(m => m.ID == id);
+            var deliveries = await _context.Deliveries
                 .FirstOrDefaultAsync(m => m.ID == id);
-            update_delivery update = 
-            List<update_delivery> up
-            ViewData["history_delivery"] = up;
-           
-                if (deliveries == null)
-                {
-                    return NotFound();
-                }
+            
+            ViewData["delivery_history"] = deliveries.delivery_history;
+            System.Diagnostics.Debug.WriteLine(deliveries.delivery_history.Count);
+            if (deliveries == null)
+            {
+                return NotFound();
+            }
 
             return View(deliveries);
         }
@@ -100,7 +99,7 @@ namespace BkpGasProcurementSystem.Views
             
                 
                 deliveries.username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
-                price = price.Remove(0, 1);
+                price = price.Remove(0, 2);
                 deliveries.orders = new Orders { phone = phone, address = address, username = username, total_price = float.Parse(price), order_date = ordertime, Payment_status = paymentstat, products = product };
                 var update = new update_delivery { status = "In Delivery", update_when = DateTime.Now, message = "Assigned to Courier" };
                 if (deliveries.delivery_history == null)
