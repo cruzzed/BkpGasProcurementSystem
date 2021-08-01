@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+   
 </p>
 <table class="table">
     <thead>
@@ -37,7 +37,7 @@
         @foreach (var item in Model)
         {
 
-            @if (User.IsInRole("Delivery"))
+            @if (User.IsInRole("Delivery") && item.Payment_status == "PAID")
             {
                 <tr>
                     <td>
@@ -65,7 +65,7 @@
                 </tr>
                
             }
-            else if (item.username == User.Identity.Name)
+            else if (item.username == User.Identity.Name && User.IsInRole("Customer"))
             {
 
                 <tr>
@@ -88,8 +88,10 @@
                         @Html.DisplayFor(modelItem => item.Payment_status)
                     </td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.ID">Cancel Order </a>
-                        <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.ID">Cancel Order  </a>
+                        
+                        <a asp-action="Pay" asp-route-id="@item.ID">   Pay  </a>
+                        <a asp-action="Details" asp-route-id="@item.ID"> Details</a>
                     </td>
                 </tr>
               
