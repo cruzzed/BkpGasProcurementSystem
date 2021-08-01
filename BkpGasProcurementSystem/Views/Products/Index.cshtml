@@ -10,6 +10,7 @@
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
+
     <thead>
         <tr>
             <th>
@@ -37,6 +38,7 @@
                 @if (item.Picture != null)
                 {
                     <img id="Picture" style="width:128px;height:128px; object-fit:cover" src="data:image/*;base64,@(Convert.ToBase64String(item.Picture))">
+                   
                 }
                 else
                 {
@@ -45,15 +47,19 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
+                
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Type)
+                
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
+              
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Weight)
+               
             </td>
             <td>
                 @if (User.IsInRole("Admin"))
@@ -62,11 +68,22 @@
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> <span>|</span>
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                 }
+            
+            
+               
                 
-                <form asp-action="AddToOrder" asp-route-id="@item.Id">
-                    <input name="Id" type="hidden" value="@item.Id"/>
-                    <input class="btn btn-primary" type="submit" value="Add to Order"/>
-                </form>
+            <form asp-action="Create" asp-controller="Orders" asp-route-id="@item.Id">
+                
+                <input type="hidden" value="@(Convert.ToBase64String(item.Picture))" name="pic" />
+                <input type="hidden" value="@Html.DisplayFor(modelItem => item.Weight)" name="weight" />
+                <input type="hidden" value="@Html.DisplayFor(modelItem => item.Price)" name="price" />
+                <input type="hidden" value="@Html.DisplayFor(modelItem => item.Type)" name="type" />
+                <input type="hidden" value="@Html.DisplayFor(modelItem => item.Name)" name="name" />
+                <input name="Id" type="hidden" value="@item.Id" />
+                <input class="btn btn-primary" type="submit" value="Add to Order" />
+            </form>
+                }
+
             </td>
         </tr>
 }

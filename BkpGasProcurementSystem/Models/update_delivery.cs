@@ -12,7 +12,7 @@ namespace BkpGasProcurementSystem.Models
 
         [DataType(DataType.MultilineText)]
         public string message { get; set; }
-        [DataType(DataType.Date)]
+        
         public DateTime update_when { get; set; }
 
         public string status { get; set; }

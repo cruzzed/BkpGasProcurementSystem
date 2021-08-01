@@ -258,7 +258,7 @@ namespace BkpGasProcurementSystem.Views
             try
             {
                 if (unpaid_order.products == null) unpaid_order.products = new List<Product>();
-                unpaid_order.products.(product);
+                unpaid_order.products.Add(product);
                 _order_context.Orders.Update(unpaid_order);
                 await _order_context.SaveChangesAsync();
             } 
