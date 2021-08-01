@@ -74,6 +74,7 @@ namespace BkpGasProcurementSystem.Views
                 BkpGasProcurementSystemUser user = _userManager.FindByIdAsync(id).Result;
                 orders.address = user.Address;
                 orders.phone = user.PhoneNumber;
+                orders.order_date = DateTime.Now;
                 _context.Add(orders);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
