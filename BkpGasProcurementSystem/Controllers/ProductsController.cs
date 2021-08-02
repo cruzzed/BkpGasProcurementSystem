@@ -21,12 +21,10 @@ namespace BkpGasProcurementSystem.Views
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<BkpGasProcurementSystemUser> _userManager;
-        private readonly BkpGasProcurementSystemProductContext _context;
-        private readonly BkpGasProcurementSystemOrdersContext _order_context;
+        private readonly BkpGasProcurementSystemContext _context;
 
         public ProductsController(
-            BkpGasProcurementSystemProductContext context,
-            BkpGasProcurementSystemOrdersContext order_context,
+            BkpGasProcurementSystemContext context, 
             UserManager<BkpGasProcurementSystemUser> userManager,
             IHttpContextAccessor httpContextAccessor
         )
@@ -34,7 +32,6 @@ namespace BkpGasProcurementSystem.Views
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
             _context = context;
-            _order_context = order_context;
         }
 
         // GET: Products
@@ -208,18 +205,18 @@ namespace BkpGasProcurementSystem.Views
 
         public async Task<Product> LoadFormPictureToProduct(Product P, IFormFile Picture)
         {
-            //step 1: read json
-            var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json");
-            IConfigurationRoot configure = builder.Build();
+            ////step 1: read json
+            //var builder = new ConfigurationBuilder()
+            //.SetBasePath(Directory.GetCurrentDirectory())
+            //.AddJsonFile("appsettings.json");
+            //IConfigurationRoot configure = builder.Build();
 
-            CloudStorageAccount objectaccount = CloudStorageAccount.Parse(configure["ConnectionString:BkpGasProcurementSystemBlobConnect"]);
+            //CloudStorageAccount objectaccount = CloudStorageAccount.Parse(configure["ConnectionString:BkpGasProcurementSystemBlobConnect"]);
 
-            CloudBlobClient blobclient = objectaccount.CreateCloudBlobClient();
+            //CloudBlobClient blobclient = objectaccount.CreateCloudBlobClient();
 
-            //step 2: how to create a new container in the blob storage account.
-            CloudBlobContainer container = blobclient.GetContainerReference("testblob");
+            ////step 2: how to create a new container in the blob storage account.
+            //CloudBlobContainer container = blobclient.GetContainerReference("testblob");
 
             using (var stream = new MemoryStream())
             {
@@ -238,7 +235,7 @@ namespace BkpGasProcurementSystem.Views
                 _userManager.GetUserId(HttpContext.User)
             ).Result;
 
-            var order_list = from order in _order_context.Orders
+            var order_list = from order in _context.Orders
                              select order;
           
             Orders unpaid_order = null;
@@ -262,21 +259,21 @@ namespace BkpGasProcurementSystem.Views
                     order_date = DateTime.Now,
                     total_price = 0.0f
                 };
-                _order_context.Orders.Add(unpaid_order);
-                await _order_context.SaveChangesAsync();
+                _context.Orders.Add(unpaid_order);
+                await _context.SaveChangesAsync();
             }
 
             Debug.WriteLine(unpaid_order.ID);
 
-            unpaid_order = await _order_context.Orders.FindAsync(unpaid_order.ID);
-            _order_context.Attach(unpaid_order);
+            unpaid_order = await _context.Orders.FindAsync(unpaid_order.ID);
+            _context.Attach(unpaid_order);
             product = await _context.Product.FindAsync(product.Id);
             try
             {
                 if (unpaid_order.products == null) unpaid_order.products = new List<Product>();
                 unpaid_order.products.Add(product);
-                _order_context.Orders.Update(unpaid_order);
-                await _order_context.SaveChangesAsync();
+                _context.Orders.Update(unpaid_order);
+                await _context.SaveChangesAsync();
             } 
             catch (DbUpdateConcurrencyException)
             {

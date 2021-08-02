@@ -19,9 +19,9 @@ namespace BkpGasProcurementSystem.Views
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<BkpGasProcurementSystemUser> _userManager;
 
-        private readonly BkpGasProcurementSystemOrdersContext _context;
+        private readonly BkpGasProcurementSystemContext _context;
 
-        public OrdersController(BkpGasProcurementSystemOrdersContext context, UserManager<BkpGasProcurementSystemUser> usermanager, IHttpContextAccessor httpContextAccessor)
+        public OrdersController(BkpGasProcurementSystemContext context, UserManager<BkpGasProcurementSystemUser> usermanager, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = usermanager;
             _httpContextAccessor = httpContextAccessor;
@@ -75,13 +75,13 @@ namespace BkpGasProcurementSystem.Views
                 var id = _userManager.GetUserId(HttpContext.User);
                 orders.username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
                 BkpGasProcurementSystemUser user = _userManager.FindByIdAsync(id).Result;
-                
-                
+
+
                 var flag = false;
-           
-                
-                
-                    _context.Orders.Include(m => m.products).SingleOrDefault(m => m.username == user.UserName && m.Payment_status.ToUpper() == "PENDING");
+
+
+
+                _context.Orders.Include(m => m.products).SingleOrDefault(m => m.username == user.UserName && m.Payment_status.ToUpper() == "PENDING");
                     var unpaid_order = await _context.Orders.FirstOrDefaultAsync(m => m.username == user.UserName && m.Payment_status.ToUpper() == "PENDING");
                     
                 

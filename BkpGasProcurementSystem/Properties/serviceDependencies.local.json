@@ -8,6 +8,18 @@
       "type": "storage.azure",
       "connectionId": "BkpGasProcurementSystemBlobConnect",
       "secretStore": "LocalSecretsFile"
+    },
+    "mssql1": {
+      "resourceId": null,
+      "type": "mssql.local",
+      "connectionId": "BkpGasProcurementSystemIdentityContextConnection",
+      "secretStore": "LocalSecretsFile"
+    },
+    "mssql2": {
+      "resourceId": null,
+      "type": "mssql.local",
+      "connectionId": "BkpGasProcurementSystemContext",
+      "secretStore": "LocalSecretsFile"
     }
   }
 }

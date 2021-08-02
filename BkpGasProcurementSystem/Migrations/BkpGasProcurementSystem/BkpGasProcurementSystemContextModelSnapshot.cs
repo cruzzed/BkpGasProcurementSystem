@@ -4,16 +4,14 @@ using BkpGasProcurementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystemDeliveries
+namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystem
 {
-    [DbContext(typeof(BkpGasProcurementSystemDeliveriesContext))]
-    [Migration("20210801130231_adsd")]
-    partial class adsd
+    [DbContext(typeof(BkpGasProcurementSystemContext))]
+    partial class BkpGasProcurementSystemContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

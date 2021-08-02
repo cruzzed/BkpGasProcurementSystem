@@ -6,28 +6,16 @@
       "connectionId": "BkpGasProcurementSystemBlobConnect",
       "secretStore": "AzureAppSettings"
     },
-    "mssql3": {
+    "mssql1": {
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/bkpgasprocurementdbserver/databases/BkpGasProcurementSystem_db",
       "type": "mssql.azure",
       "connectionId": "BkpGasProcurementSystemIdentityContextConnection",
       "secretStore": "AzureAppSettings"
     },
-    "mssql4": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/bkpgasprocurementdbserver/databases/BkpGasProcurementSystem_db_orders",
-      "type": "mssql.azure",
-      "connectionId": "BkpGasProcurementSystemOrdersContext",
-      "secretStore": "AzureAppSettings"
-    },
     "mssql2": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/bkpgasprocurementdbserver/databases/BkpGasProcurementSystem_db_product",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/bkpgasprocurementdbserver/databases/BkpGasProcurementSystem_db",
       "type": "mssql.azure",
-      "connectionId": "BkpGasProcurementSystemProductContext",
-      "secretStore": "AzureAppSettings"
-    },
-    "mssql1": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/bkpgasprocurementdbserver/databases/BkpGasProcurementSystem_db_deliveries",
-      "type": "mssql.azure",
-      "connectionId": "BkpGasProcurementSystemDeliveriesContext",
+      "connectionId": "BkpGasProcurementSystemContext",
       "secretStore": "AzureAppSettings"
     }
   }

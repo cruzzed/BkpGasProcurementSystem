@@ -32,19 +32,16 @@ namespace BkpGasProcurementSystem
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddDbContext<BkpGasProcurementSystemDeliveriesContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BkpGasProcurementSystemDeliveriesContext")));
+            services.AddDbContext<BkpGasProcurementSystemContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("BkpGasProcurementSystemContext")));
 
-            services.AddDbContext<BkpGasProcurementSystemProductContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BkpGasProcurementSystemProductContext")));
-
-            services.AddDbContext<BkpGasProcurementSystemOrdersContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BkpGasProcurementSystemOrdersContext")));
             services.AddAzureClients(builder =>
             {
                 builder.AddBlobServiceClient(Configuration["ConnectionStrings:BkpGasProcurementSystemBlobConnection:blob"], preferMsi: true);
                 builder.AddQueueServiceClient(Configuration["ConnectionStrings:BkpGasProcurementSystemBlobConnection:queue"], preferMsi: true);
             });
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

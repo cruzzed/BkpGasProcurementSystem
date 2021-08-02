@@ -1,17 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystemDeliveries
+namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystem
 {
-    public partial class add : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "ordersID",
-                table: "Deliveries",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
@@ -28,6 +23,28 @@ namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystemDeliveries
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Deliveries",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ordersID = table.Column<int>(nullable: true),
+                    status = table.Column<string>(nullable: true),
+                    ship_time = table.Column<DateTime>(nullable: false),
+                    username = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Deliveries", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Deliveries_Orders_ordersID",
+                        column: x => x.ordersID,
+                        principalTable: "Orders",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,6 +71,28 @@ namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystemDeliveries
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "update_delivery",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    message = table.Column<string>(nullable: true),
+                    update_when = table.Column<DateTime>(nullable: false),
+                    status = table.Column<string>(nullable: true),
+                    DeliveriesID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_update_delivery", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_update_delivery_Deliveries_DeliveriesID",
+                        column: x => x.DeliveriesID,
+                        principalTable: "Deliveries",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Deliveries_ordersID",
                 table: "Deliveries",
@@ -64,34 +103,25 @@ namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystemDeliveries
                 table: "Product",
                 column: "OrdersID");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Deliveries_Orders_ordersID",
-                table: "Deliveries",
-                column: "ordersID",
-                principalTable: "Orders",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.CreateIndex(
+                name: "IX_update_delivery_DeliveriesID",
+                table: "update_delivery",
+                column: "DeliveriesID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Deliveries_Orders_ordersID",
-                table: "Deliveries");
-
             migrationBuilder.DropTable(
                 name: "Product");
 
             migrationBuilder.DropTable(
+                name: "update_delivery");
+
+            migrationBuilder.DropTable(
+                name: "Deliveries");
+
+            migrationBuilder.DropTable(
                 name: "Orders");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Deliveries_ordersID",
-                table: "Deliveries");
-
-            migrationBuilder.DropColumn(
-                name: "ordersID",
-                table: "Deliveries");
         }
     }
 }

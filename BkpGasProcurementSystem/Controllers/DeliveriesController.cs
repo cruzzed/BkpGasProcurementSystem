@@ -18,10 +18,10 @@ namespace BkpGasProcurementSystem.Views
     public class DeliveriesController : Controller
     {
 
-        private readonly BkpGasProcurementSystemDeliveriesContext _context;
+        private readonly BkpGasProcurementSystemContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<BkpGasProcurementSystemUser> _userManager;
-        public DeliveriesController(BkpGasProcurementSystemDeliveriesContext context,UserManager<BkpGasProcurementSystemUser> usermgr,IHttpContextAccessor httpContextAccessor)
+        public DeliveriesController(BkpGasProcurementSystemContext context,UserManager<BkpGasProcurementSystemUser> usermgr,IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
             _userManager = usermgr;

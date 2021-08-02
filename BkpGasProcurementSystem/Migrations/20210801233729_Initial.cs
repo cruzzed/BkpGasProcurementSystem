@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystemOrders
+namespace BkpGasProcurementSystem.Migrations
 {
-    public partial class updateOrder : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

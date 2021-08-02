@@ -7,21 +7,13 @@
       "type": "storage",
       "connectionId": "BkpGasProcurementSystemBlobConnect"
     },
-    "mssql3": {
+    "mssql1": {
       "type": "mssql",
       "connectionId": "BkpGasProcurementSystemIdentityContextConnection"
     },
-    "mssql4": {
-      "type": "mssql",
-      "connectionId": "BkpGasProcurementSystemOrdersContext"
-    },
     "mssql2": {
       "type": "mssql",
-      "connectionId": "BkpGasProcurementSystemProductContext"
-    },
-    "mssql1": {
-      "type": "mssql",
-      "connectionId": "BkpGasProcurementSystemDeliveriesContext"
+      "connectionId": "BkpGasProcurementSystemContext"
     }
   }
 }
