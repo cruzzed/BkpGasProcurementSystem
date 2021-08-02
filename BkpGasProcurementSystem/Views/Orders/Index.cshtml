@@ -55,7 +55,7 @@
                         @Html.DisplayFor(modelItem => item.Payment_status)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Accept Order</a>
+                        <a  asp-action="Edit" asp-route-id="@item.ID">Accept Order</a>
                         <a asp-action="Details" asp-route-id="@item.ID">Details</a>
                     </td>
                 </tr>
@@ -85,7 +85,6 @@
                     </td>
                     <td>
                         <a asp-action="Delete" asp-route-id="@item.ID">Cancel Order  </a>
-                        
                         <a asp-action="Pay" asp-route-id="@item.ID">   Pay  </a>
                         <a asp-action="Details" asp-route-id="@item.ID"> Details</a>
                     </td>

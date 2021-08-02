@@ -38,22 +38,25 @@
         @foreach (update_delivery a in (List<update_delivery>)ViewData["delivery_history"])
         {
 
-                    <dd class="col-sm-2">
-                        @Html.DisplayFor(model => a.update_when)
-                    </dd>
-                                    <dd class="col-sm-2">
-                                        @Html.DisplayFor(model => a.message)
-                                    </dd>
-                                    <dd class="col-sm-8">
-                                        @Html.DisplayFor(model => a.status)
-                                    </dd>
-}
+<dd class="col-sm-2">
+    @Html.DisplayFor(model => a.update_when)
+</dd>
+                <dd class="col-sm-2">
+                    @Html.DisplayFor(model => a.message)
+                </dd>
+                                <dd class="col-sm-8">
+                                    @Html.DisplayFor(model => a.status)
+                                </dd>}
         }
 
 
     </dl>
-   
 
+    
+        }
+
+
+    </dl>
     @if (User.IsInRole("Delivery"))
     {
 <div>
