@@ -104,7 +104,7 @@ namespace BkpGasProcurementSystem.Views
 
             var npr = Regex.Match(price, @"\d+").Value;
             price = npr;
-            deliveries.orders = new Orders { phone = phone, address = address, username = username, total_price = float.Parse(price), order_date = ordertime, Payment_status = paymentstat, products = product };
+            //deliveries.orders = new Orders { phone = phone, address = address, username = username, total_price = float.Parse(price), order_date = ordertime, Payment_status = paymentstat, products = product };
                 var update = new update_delivery { status = "In Delivery", update_when = DateTime.Now, message = "Assigned to Courier" };
                 if (deliveries.delivery_history == null)
                 {
