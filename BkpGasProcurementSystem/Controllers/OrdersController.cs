@@ -265,6 +265,7 @@ namespace BkpGasProcurementSystem.Views
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            
             var orders = await _context.Orders.FindAsync(id);
             _context.Orders.Remove(orders);
             await _context.SaveChangesAsync();
