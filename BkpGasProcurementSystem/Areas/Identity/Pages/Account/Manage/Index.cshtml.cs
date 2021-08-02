@@ -25,6 +25,8 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account.Manage
 
         public string Username { get; set; }
 
+        public string Role { get; set; }
+
         [TempData]
         public string StatusMessage { get; set; }
 
@@ -50,8 +52,10 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
+            var roleUser = await _userManager.GetRolesAsync(user);
+            var role = roleUser.ElementAt(0);
             Username = userName;
+            Role = role;
 
             Input = new InputModel
             {
