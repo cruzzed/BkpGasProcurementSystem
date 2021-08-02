@@ -182,13 +182,13 @@ namespace BkpGasProcurementSystem.Views
 
         public IActionResult ValidatePicture(IFormFile Picture)
         {
-            var MAX_SIZE = 1 * 1024 * 1024;
+            var MAX_SIZE = 5 * 1024 * 1024;
             if (Picture != null)
             {
                 if (Picture.ContentType.ToLower().Split("/")[0] != "image") //accept=".png,.jpg,.jpeg,.gif,.tif"
                 {
                     return BadRequest("The " + Picture.FileName +
-                        " unable to upload because uploaded file must be a text file");
+                        " unable to upload because uploaded file must be an image file (.png,.jpg,.jpeg,.gif,.tif)!");
                 }
                 if (Picture.Length == 0)
                 {
@@ -196,7 +196,7 @@ namespace BkpGasProcurementSystem.Views
                 }
                 else if (Picture.Length > MAX_SIZE)
                 {
-                    return BadRequest("The " + Picture.FileName + "file is exceed 1 MB !");
+                    return BadRequest("The " + Picture.FileName + "file is exceed 5 MB !");
                 }
                 return Ok();
             }
@@ -205,23 +205,27 @@ namespace BkpGasProcurementSystem.Views
 
         public async Task<Product> LoadFormPictureToProduct(Product P, IFormFile Picture)
         {
-            ////step 1: read json
-            //var builder = new ConfigurationBuilder()
-            //.SetBasePath(Directory.GetCurrentDirectory())
-            //.AddJsonFile("appsettings.json");
-            //IConfigurationRoot configure = builder.Build();
+            // get path builder
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+            IConfigurationRoot configure = builder.Build();
 
-            //CloudStorageAccount objectaccount = CloudStorageAccount.Parse(configure["ConnectionString:BkpGasProcurementSystemBlobConnect"]);
+            // Get Storage Account
+            CloudStorageAccount objectaccount = CloudStorageAccount.Parse(configure["ConnectionStrings:BkpGasProcurementSystemBlobConnect"]);
 
-            //CloudBlobClient blobclient = objectaccount.CreateCloudBlobClient();
+            // Get blob client
+            CloudBlobClient blobclient = objectaccount.CreateCloudBlobClient();
 
-            ////step 2: how to create a new container in the blob storage account.
-            //CloudBlobContainer container = blobclient.GetContainerReference("testblob");
+            // Get blob container
+            CloudBlobContainer container = blobclient.GetContainerReference("images");
 
-            using (var stream = new MemoryStream())
-            {
-                await Picture.CopyToAsync(stream);
-                P.Picture = stream.ToArray();
+            // upload to container using filename and save to db as Uri
+            using (var stream = Picture.OpenReadStream())
+            {;
+                CloudBlockBlob picblob = container.GetBlockBlobReference(Picture.FileName);
+                await picblob.UploadFromStreamAsync(stream);
+                P.Picture = picblob.Uri.ToString();
             }
             return P;
         }

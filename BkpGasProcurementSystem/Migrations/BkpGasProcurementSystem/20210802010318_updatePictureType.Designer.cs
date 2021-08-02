@@ -4,14 +4,16 @@ using BkpGasProcurementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BkpGasProcurementSystem.Migrations.BkpGasProcurementSystem
 {
     [DbContext(typeof(BkpGasProcurementSystemContext))]
-    partial class BkpGasProcurementSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20210802010318_updatePictureType")]
+    partial class updatePictureType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

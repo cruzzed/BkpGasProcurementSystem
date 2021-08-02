@@ -69,7 +69,7 @@ namespace BkpGasProcurementSystem.Views
         [HttpPost]
         [ValidateAntiForgeryToken]
  
-        public async Task<IActionResult> Create(int ordid,[Bind("ID,order_date,username,address,phone,total_price,Payment_status")] Orders orders, string price, string type, string name, byte[] pic, int weight)
+        public async Task<IActionResult> Create(int ordid,[Bind("ID,order_date,username,address,phone,total_price,Payment_status")] Orders orders, string price, string type, string name, string pic, int weight)
         {
             
             if (ModelState.IsValid)
