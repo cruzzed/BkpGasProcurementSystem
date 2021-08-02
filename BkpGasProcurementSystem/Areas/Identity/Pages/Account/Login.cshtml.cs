@@ -81,22 +81,25 @@ namespace BkpGasProcurementSystem.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var user = await _userManager.FindByNameAsync(Input.Email);
+                var roleUser = await _userManager.GetRolesAsync(user);
+                var role = roleUser.ElementAt(0);
                 if (result.Succeeded)
-                {
+                { 
                     _logger.LogInformation("User logged in.");
-                    if(User.IsInRole("Customer"))
+                    if (role.Equals("Customer"))
                     {
                         return RedirectToAction("Index", "Orders");
                     }
-                    else if(User.IsInRole("Admin"))
+                    else if (role.Equals("Admin"))
                     {
                         return RedirectToAction("Index", "Products");
                     }
-                    else if(User.IsInRole("Delivery"))
+                    else if (role.Equals("Delivery"))
                     {
-                       return RedirectToAction("Index", "Deliveries");
+                        return RedirectToAction("Index", "Deliveries");
                     }
-                    //return LocalRedirect(returnUrl);
+      
                 }
                 if (result.RequiresTwoFactor)
                 {
