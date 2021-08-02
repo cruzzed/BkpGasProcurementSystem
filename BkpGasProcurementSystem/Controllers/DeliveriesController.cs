@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using BkpGasProcurementSystem.Areas.Identity.Data;
 using System.Security.Claims;
-
+using System.Text.RegularExpressions;
 
 namespace BkpGasProcurementSystem.Views
 {
@@ -38,7 +38,7 @@ namespace BkpGasProcurementSystem.Views
         public async Task<IActionResult> Index()
         {
             ViewData["customeruser"] = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
-            
+           
             ViewData["history_delivery"] = new List<update_delivery>();
            
             
@@ -59,8 +59,7 @@ namespace BkpGasProcurementSystem.Views
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             ViewData["delivery_history"] = deliveries.delivery_history;
-            
-            
+           
             if (deliveries == null)
             {
                 return NotFound();
@@ -102,8 +101,10 @@ namespace BkpGasProcurementSystem.Views
             
                 
                 deliveries.username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
-                price = price.Remove(0, 1);
-                deliveries.orders = new Orders { phone = phone, address = address, username = username, total_price = float.Parse(price), order_date = ordertime, Payment_status = paymentstat, products = product };
+
+            var npr = Regex.Match(price, @"\d+").Value;
+            price = npr;
+            deliveries.orders = new Orders { phone = phone, address = address, username = username, total_price = float.Parse(price), order_date = ordertime, Payment_status = paymentstat, products = product };
                 var update = new update_delivery { status = "In Delivery", update_when = DateTime.Now, message = "Assigned to Courier" };
                 if (deliveries.delivery_history == null)
                 {

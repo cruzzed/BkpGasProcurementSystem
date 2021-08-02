@@ -48,28 +48,38 @@
         </dd>
     </dl>
     <dl class="row">
-      
+
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.products.Last().Picture)
+        </dt>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.products.Last().Name)
         </dt>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.products.Last().Price)
         </dt>
-        <dt class="col-sm-8">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.products.Last().Weight)
         </dt>
 
         @foreach (Product a in (List<Product>)ViewData["prolist"])
         {
 
-
+            @if (a.Picture != null)
+            {
+                <img id="profilePicture" style="width:350px;height:350px; object-fit:cover" src="data:image/*;base64,@Convert.ToBase64String(a.Picture)">
+            }
+            else
+            {
+                <label>No Image Found</label>
+            }
             <dd class="col-sm-2">
                 @Html.DisplayFor(model => a.Name)
             </dd>
             <dd class="col-sm-2">
                 @Html.DisplayFor(model => a.Price)
             </dd>
-            <dd class="col-sm-8">
+            <dd class="col-sm-2">
                 @Html.DisplayFor(model => a.Weight)
             </dd>
         }
