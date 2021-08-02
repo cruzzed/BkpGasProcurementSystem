@@ -1,11 +1,5 @@
 {
   "dependencies": {
-    "storage1": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/bkpgasprocurementsystems",
-      "type": "storage.azure",
-      "connectionId": "BkpGasProcurementSystemBlobConnect",
-      "secretStore": "AzureAppSettings"
-    },
     "mssql1": {
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/bkpgasprocurementdbserver/databases/BkpGasProcurementSystem_db",
       "type": "mssql.azure",
@@ -16,6 +10,12 @@
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/bkpgasprocurementdbserver/databases/BkpGasProcurementSystem_db",
       "type": "mssql.azure",
       "connectionId": "BkpGasProcurementSystemContext",
+      "secretStore": "AzureAppSettings"
+    },
+    "storage1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/bkpgasprocurementsystems",
+      "type": "storage.azure",
+      "connectionId": "BkpGasProcurementSystemBlobConnect",
       "secretStore": "AzureAppSettings"
     }
   }

@@ -3,10 +3,6 @@
     "secrets1": {
       "type": "secrets"
     },
-    "storage1": {
-      "type": "storage",
-      "connectionId": "BkpGasProcurementSystemBlobConnect"
-    },
     "mssql1": {
       "type": "mssql",
       "connectionId": "BkpGasProcurementSystemIdentityContextConnection"
@@ -14,6 +10,10 @@
     "mssql2": {
       "type": "mssql",
       "connectionId": "BkpGasProcurementSystemContext"
+    },
+    "storage1": {
+      "type": "storage",
+      "connectionId": "BkpGasProcurementSystemBlobConnect"
     }
   }
 }

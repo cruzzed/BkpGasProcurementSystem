@@ -67,8 +67,22 @@ namespace BkpGasProcurementSystem.Controllers
             return View(user);
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            if (userManager.FindByEmailAsync("admin@bkp.com").Result == null)
+            {
+                BkpGasProcurementSystemUser admin = new BkpGasProcurementSystemUser
+                {
+                    UserName = "admin@bkp.com",
+                    FullName = "Admin",
+                    Address = "bkp",
+                    Email = "admin@bkp.com",
+                    PhoneNumber = "0902839132",
+                    EmailConfirmed = true
+                };
+                IdentityResult result = await userManager.CreateAsync(admin, "Bkp@1234");
+                await userManager.AddToRoleAsync(admin, Roles.Admin.ToString());
+            }
             return View();
         }
 
