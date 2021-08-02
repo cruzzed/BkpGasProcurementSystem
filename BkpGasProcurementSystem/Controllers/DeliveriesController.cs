@@ -40,6 +40,7 @@ namespace BkpGasProcurementSystem.Views
             ViewData["customeruser"] = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
             
             ViewData["history_delivery"] = new List<update_delivery>();
+           
             
             return View(await _context.Deliveries.ToListAsync());
         }
@@ -52,11 +53,13 @@ namespace BkpGasProcurementSystem.Views
             {
                 return NotFound();
             }
+           
             _context.Deliveries.Include(m => m.delivery_history).SingleOrDefault(m => m.ID == id);
             var deliveries = await _context.Deliveries
                 .FirstOrDefaultAsync(m => m.ID == id);
-            
+
             ViewData["delivery_history"] = deliveries.delivery_history;
+            
             
             if (deliveries == null)
             {

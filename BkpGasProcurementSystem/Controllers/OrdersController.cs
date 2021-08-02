@@ -11,6 +11,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using BkpGasProcurementSystem.Areas.Identity.Data;
+using System.Text.RegularExpressions;
 
 namespace BkpGasProcurementSystem.Views
 {
@@ -31,7 +32,7 @@ namespace BkpGasProcurementSystem.Views
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-
+            ViewData["prolist"] = new List<Product>();
             return View(await _context.Orders.ToListAsync());
         }
 
@@ -42,9 +43,11 @@ namespace BkpGasProcurementSystem.Views
             {
                 return NotFound();
             }
-
+            _context.Orders.Include(m => m.products).SingleOrDefault(m => m.ID == id);
             var orders = await _context.Orders
                 .FirstOrDefaultAsync(m => m.ID == id);
+
+            ViewData["prolist"] = orders.products;
             if (orders == null)
             {
                 return NotFound();
@@ -78,17 +81,16 @@ namespace BkpGasProcurementSystem.Views
 
 
                 var flag = false;
-
-
-
-                _context.Orders.Include(m => m.products).SingleOrDefault(m => m.username == user.UserName && m.Payment_status.ToUpper() == "PENDING");
-                    var unpaid_order = await _context.Orders.FirstOrDefaultAsync(m => m.username == user.UserName && m.Payment_status.ToUpper() == "PENDING");
-                    
+           
                 
-                System.Diagnostics.Debug.WriteLine(unpaid_order);
-                price = price.Remove(0, 2);
-                //int len = price.Length-3;
-                //price = price.Remove(len, 3);
+                
+                    _context.Orders.Include(m => m.products).FirstOrDefault(m => (m.username == user.UserName) && (m.Payment_status.ToUpper() == "PENDING"));
+                    var unpaid_order = await _context.Orders.FirstOrDefaultAsync(m => m.username == user.UserName && m.Payment_status.ToUpper() == "PENDING");
+
+
+
+                var npr = Regex.Match(price, @"\d+").Value;
+                price = npr;
                
                 if (unpaid_order != null)
                 {
@@ -121,15 +123,17 @@ namespace BkpGasProcurementSystem.Views
                     };
                 }
                 var tot = 0;
+                var wei = 0;
                 System.Diagnostics.Debug.WriteLine(unpaid_order.products.Count);
                 foreach ( var a in unpaid_order.products)
                 {
-                    System.Diagnostics.Debug.WriteLine(a.Type);
+                    
                     tot  = tot + a.Price;
+                    wei = wei + a.Weight;
                 }
+
                 unpaid_order.total_price = tot + int.Parse(price);
-                System.Diagnostics.Debug.WriteLine(unpaid_order.total_price);
-                System.Diagnostics.Debug.WriteLine(unpaid_order.ID);
+                
 
 
 
@@ -202,7 +206,42 @@ namespace BkpGasProcurementSystem.Views
             }
             return View("~/Views/Deliveries/Create.cshtml");
         }
+        
+        public async Task<IActionResult> Pay(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var orders = await _context.Orders.FindAsync(id);
+            if (orders == null)
+            {
+                return NotFound();
+            }
+            return View(orders);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Pay(int id)
+        {
+            
+            
+                try
+                {
+                    var orderss = await _context.Orders.FindAsync(id);
+                    orderss.Payment_status = "PAID";
+                    _context.Orders.Update(orderss);
+                    await _context.SaveChangesAsync();
+
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+
+                }
+                return RedirectToAction(nameof(Index));
+            
+        }
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
